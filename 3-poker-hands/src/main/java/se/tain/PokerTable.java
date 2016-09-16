@@ -1,5 +1,9 @@
 package se.tain;
 
+import se.tain.texasholdem.TexasHoldemDeterminator;
+import se.tain.texasholdem.evaluators.*;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Stream;
@@ -7,11 +11,18 @@ import java.util.stream.Stream;
 import static java.util.Arrays.asList;
 
 public class PokerTable {
+
+    private final WinnerDeterminator determinator;
+
+    public PokerTable(WinnerDeterminator determinator) {
+        this.determinator = determinator;
+    }
+
     public static void main( String[] args ) {
         Scanner consoleInput = new Scanner( System.in );
         Stream<String> consoleInputDealerStream = Stream.generate( consoleInput::nextLine );
 
-        PokerTable testTable = new PokerTable();
+        PokerTable testTable = new PokerTable(new TexasHoldemDeterminator(new RoyalFlushEvaluator(), new FourOfAKindEvaluator(), new StraightFlushEvaluator(), new FullHouseEvaluator(), new FlushEvaluator(), new StraightEvaluator(), new ThreeOfAKindEvaluator(), new TwoPairEvaluator(), new PairEvaluator(), new HighCardEvaluator(), new KickerEvaluator()));
 
         testTable.deal(
                 consoleInputDealerStream,
@@ -27,11 +38,14 @@ public class PokerTable {
      * @return stream of winning players for each new valid card on a table. Invalid cards are just skipped
      */
     public Stream<List<Player>> deal( Stream<String> dealerCardsStream, List<Player> players ) {
-        return dealerCardsStream.map( card -> getWinners( card, players ) );
-    }
-
-    private static List<Player> getWinners( String inputCard, List<Player> players ) {
-        System.out.printf( "Card dealt: %s%n", inputCard );
-        return players;
+        return dealerCardsStream.map( card -> {
+            System.out.printf( "Card dealt: %s ", card );
+            try {
+                return determinator.define(Card.valueOf(card), players);
+            }catch (Exception ex){
+                System.out.printf(" <<SKIPPED>> : %s ", ex.getMessage());
+            }
+            return Collections.emptyList();
+        });
     }
 }
