@@ -1,6 +1,7 @@
 package se.tain;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -21,6 +22,7 @@ public class CacheMapTest {
         cache.setTimeToLive( TIME_TO_LIVE );
     }
 
+    @Ignore
     @Test
     public void testExpiry() throws Exception {
         cache.put( 1, "apple" );
@@ -32,6 +34,7 @@ public class CacheMapTest {
 
     }
 
+    @Ignore
     @Test
     public void testSize() throws Exception {
         assertEquals( 0, cache.size() );
@@ -41,6 +44,7 @@ public class CacheMapTest {
         assertEquals( 0, cache.size() );
     }
 
+    @Ignore
     @Test
     public void testPartialExpiry() throws Exception {
         //Add an apple, it will expire at 2000
@@ -61,6 +65,7 @@ public class CacheMapTest {
         assertEquals( 1, cache.size() );
     }
 
+    @Ignore
     @Test
     public void testPutReturnValue() {
         cache.put( 1, "apple" );
@@ -69,6 +74,7 @@ public class CacheMapTest {
         assertNull( cache.put( 1, "mango" ) );
     }
 
+    @Ignore
     @Test
     public void testRemove() throws Exception {
         assertNull( cache.remove( new Integer( 1 ) ) );
@@ -82,6 +88,7 @@ public class CacheMapTest {
 
     }
 
+    @Ignore
     @Test
     public void testContainsKeyAndContainsValue() {
         assertFalse( cache.containsKey( 1 ) );
